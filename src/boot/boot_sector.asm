@@ -349,6 +349,10 @@ enable_a20:
 
 ; this + A20 allows for full 32 bit addressing
 move_to_protected:
+; set video mode to VGA mode 0x13
+    mov ax, 0x13
+    int 0x10
+
     mov eax, cr0 
     or al, 1       ; set PE (Protection Enable) bit in CR0 (Control Register 0)
     mov cr0, eax
