@@ -2,6 +2,7 @@ import os
 import sys
 import struct
 import subprocess
+import platform
 from glob import glob
 
 def build_boot():
@@ -62,6 +63,69 @@ def build_disk():
             disk.seek(len(boot), 0)
             disk.write(struct.pack('<I', count))
 
+def make_config():
+    disk_img_path = os.path.join('.', 'disk.raw')
+    template_path = os.path.join('.', 'bochsrc.bxrc.template')
+    conf_path = os.path.join('.', 'rungame.bxrc')
+    bios_img_path = os.path.join('.', 'bochs', 'BIOS-bochs-latest')
+    vga_img_path = os.path.join('.', 'bochs', 'VGABIOS-lgpl-latest')
+    
+    size = 512
+    with open(disk_img_path, 'rb') as disk:
+        disk.seek(0, 2) #goto end
+        size = disk.tell()
+        disk.seek(0,0) #to beggining
+
+    print(size)
+    sectors = size // 512
+    print(sectors)
+    heads = 1
+    spt = 1
+    cyl = 1
+    while heads * spt * cyl <= sectors:
+        spt += 1
+        if spt > 63:
+            cyl += 1
+            spt = 1
+        if cyl > 1024:
+            heads += 1
+            cyl = 1
+
+    while heads * spt * cyl > sectors and spt > 1:
+        spt -= 1
+
+    display_lib = 'x'
+    config_lib = 'textconfig'
+    if platform.system() == 'Windows':
+        display_lib = 'win32'
+        config_lib = 'win32config'
+
+    conf = ""
+    with open(template_path) as tp:
+        conf = tp.read()
+
+    cdict = { "configtype":config_lib,
+              "displaytype":display_lib,
+              "biosimage":bios_img_path,
+              "vgaromimage":vga_img_path,
+              "diskpath":disk_img_path,
+              "cyl":cyl,
+              "head":heads,
+              "sectorsptrack":spt
+              }
+
+    nconf = conf.format(**cdict)
+
+    with open(conf_path, 'w') as cnf:
+        cnf.write(nconf)
+                  
+    
+        
+        
+
+    
+    
+
 def clean():
     boot_bin_path = os.path.join('.', 'build', 'boot_sector.bin')
     main_bin_path = os.path.join('.', 'build', 'main.bin')
@@ -89,6 +153,7 @@ if __name__ == '__main__':
             print("Boot main failed!", file=sys.stderr)
             sys.exit(-1) 
         build_disk()
+        make_config()
     elif sys.argv[1] == 'clean':
         clean()
     else:
