@@ -426,7 +426,7 @@ spawn_obstacles:
     mul ebx
     add eax, [rng_b]
     mov [rng], eax
-    and eax, 0x3
+    and eax, 0x7
     cmp eax, 0
     je .pattern_1
     cmp eax, 1
@@ -435,6 +435,14 @@ spawn_obstacles:
     je .pattern_3
     cmp eax, 3
     je .pattern_4
+    cmp eax, 4
+    je .pattern_5
+    cmp eax, 5
+    je .pattern_6
+    cmp eax, 6
+    je .pattern_7
+    cmp eax, 7
+    je .pattern_8
     
     .pattern_1:
     mov ecx, 9
@@ -460,26 +468,69 @@ spawn_obstacles:
     
     .pattern_3:
     mov ecx, 9
-    mov esi, pattern_x_1
+    mov esi, pattern_x_3
     mov edi, obstacle_x
     rep movsd
     mov ecx, 9
-    mov esi, pattern_y_1
+    mov esi, pattern_y_3
     mov edi, obstacle_y
     rep movsd    
     jmp .ready_obstacles
     
     .pattern_4:
     mov ecx, 9
-    mov esi, pattern_x_1
+    mov esi, pattern_x_4
     mov edi, obstacle_x
     rep movsd
     mov ecx, 9
-    mov esi, pattern_y_1
+    mov esi, pattern_y_4
     mov edi, obstacle_y
     rep movsd   
     jmp .ready_obstacles
     
+    .pattern_5:
+    mov ecx, 9
+    mov esi, pattern_x_5
+    mov edi, obstacle_x
+    rep movsd
+    mov ecx, 9
+    mov esi, pattern_y_5
+    mov edi, obstacle_y
+    rep movsd
+    jmp .ready_obstacles
+    
+    .pattern_6:
+    mov ecx, 9
+    mov esi, pattern_x_6
+    mov edi, obstacle_x
+    rep movsd
+    mov ecx, 9
+    mov esi, pattern_y_6
+    mov edi, obstacle_y
+    rep movsd
+    jmp .ready_obstacles
+    
+    .pattern_7:
+    mov ecx, 9
+    mov esi, pattern_x_7
+    mov edi, obstacle_x
+    rep movsd
+    mov ecx, 9
+    mov esi, pattern_y_7
+    mov edi, obstacle_y
+    rep movsd    
+    jmp .ready_obstacles
+    
+    .pattern_8:
+    mov ecx, 9
+    mov esi, pattern_x_8
+    mov edi, obstacle_x
+    rep movsd
+    mov ecx, 9
+    mov esi, pattern_y_8
+    mov edi, obstacle_y
+    rep movsd   
+    jmp .ready_obstacles
     .ready_obstacles:
     mov ecx, 9
     .reset_ob_loop:
