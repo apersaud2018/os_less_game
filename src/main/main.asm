@@ -27,6 +27,7 @@ score dd 0
 
 main:
     ;mov esi, helloworld
+    mov ebp, 3
     
 
     ;call sprint32
@@ -54,6 +55,8 @@ main_menu:
     jz stay_in_menu
         mov al, 1
         mov [game_state], al
+        mov dword [score], 0
+        mov ebp, 3
         ;seed the RNG with frame count when user presses enter
        
         mov eax, [frame_count]
@@ -61,15 +64,16 @@ main_menu:
     stay_in_menu:
     mov eax, 0
     call draw_main_menu
+    call draw_score
     call draw_character
-    mov ebx, 0
-    mov edx, 0
-    mov eax, zero_img
-    call drawimg
-    mov ebx, 10
-    mov edx, 0
-    mov eax, one_img
-    call drawimg
+    ;mov ebx, 0
+    ;mov edx, 0
+    ;mov eax, zero_img
+    ;call drawimg
+    ;mov ebx, 10
+    ;mov edx, 0
+    ;mov eax, one_img
+    ;call drawimg
 
     jmp end_main_loop
     ; game run state
@@ -175,11 +179,34 @@ end_main_loop:
 
 
     call write_buffer_to_screen
-
+    call manage_lost
     jmp main_loop
 
 
+manage_lost:
+    cmp ebp, 0
+    jne .cont
+    mov byte [game_state], 0
+    mov dword [player_x], 0
+    mov dword [player_y], 110
+    mov dword [player_vy], 0
+    mov byte [frame_count], 0
+    mov dword [castle_y], 60
 
+    mov dword [ground_x], -320
+
+    mov ebx, 0
+    mov ecx, 9
+    .reset:
+        mov dword [obstacle_x+ebx], 400
+        mov dword [obstacle_y+ebx], 40
+        mov dword [obstacle_ready+ebx], 0
+        add ebx, 4
+    loop .reset
+    mov dword [obstacle_ready+ebx-4], 1
+    ; mov dword [obstacle_speed] dd 10
+    .cont:
+    ret
 
 
 draw_main_menu:
@@ -566,6 +593,7 @@ compute_collision:
         mov byte[obstacle_ready+(ecx-1)*4], 0
         mov eax, 50
         mov [hit], eax
+        sub ebp, 1
     .no_collision:
     
     ret
