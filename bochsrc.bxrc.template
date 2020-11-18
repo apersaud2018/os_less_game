@@ -3,7 +3,7 @@ plugin_ctrl: unmapped=true, biosdev=true, speaker=true, extfpuirq=true, parallel
 config_interface: {configtype}
 display_library: {displaytype}
 magic_break: enabled=1
-memory: host=2048, guest=2048
+memory: host=1024, guest=1024
 romimage: file="{biosimage}", address=0x00000000, options=none
 vgaromimage: file="{vgaromimage}"
 boot: disk

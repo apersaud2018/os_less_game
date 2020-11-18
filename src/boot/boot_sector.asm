@@ -520,7 +520,7 @@ protection_starts:
     mov ds, ax
     mov es, ax
     mov ss, ax
-    mov esp, 0x80000000
+    mov esp, 0x40000000
     ;sti, don't enable interupts, breaks
     mov esi, p_success
     call sprint32
