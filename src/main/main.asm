@@ -23,11 +23,13 @@ obstacle_y TIMES 9 dd 40
 obstacle_ready dd 0, 0, 0, 0, 0, 0, 0, 0, 1
 obstacle_speed dd 10
 
+max_lives equ 3
+
 score dd 0
 
 main:
     ;mov esi, helloworld
-    mov ebp, 3
+    mov ebp, max_lives
     
 
     ;call sprint32
@@ -56,7 +58,7 @@ main_menu:
         mov al, 1
         mov [game_state], al
         mov dword [score], 0
-        mov ebp, 3
+        mov ebp, max_lives
         ;seed the RNG with frame count when user presses enter
        
         mov eax, [frame_count]
@@ -185,7 +187,7 @@ end_main_loop:
 
 manage_lost:
     cmp ebp, 0
-    jne .cont
+    jge .cont
     mov byte [game_state], 0
     mov dword [player_x], 0
     mov dword [player_y], 110
