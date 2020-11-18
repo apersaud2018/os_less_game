@@ -3,7 +3,7 @@
 Hello! This is a small game written in x86 assembly that is meant to be run in the Bochs virtual machine.
 
 # Theory
-For an indepth look at the exact function of the code, please look at the [About.pdf](./About.pdf).
+For an indepth look at the exact function of the code, please look at the [About.pdf](./About.odt).
 
 
 # Running
