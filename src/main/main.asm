@@ -58,7 +58,6 @@ main_menu:
         mov al, 1
         mov [game_state], al
         mov dword [score], 0
-        mov ebp, max_lives
         ;seed the RNG with frame count when user presses enter
        
         mov eax, [frame_count]
@@ -188,6 +187,7 @@ end_main_loop:
 manage_lost:
     cmp ebp, 0
     jge .cont
+    mov ebp, max_lives
     mov byte [game_state], 0
     mov dword [player_x], 0
     mov dword [player_y], 110
